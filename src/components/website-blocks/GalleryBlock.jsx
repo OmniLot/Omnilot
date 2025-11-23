@@ -111,7 +111,7 @@ export default function GalleryBlock({ content, styleKit }) {
                 
                 {/* Cinematic Gallery Grid */}
                 <div className="grid md:grid-cols-3 gap-6">
-                    {content?.images?.map((item, idx) => (
+                    {(Array.isArray(content?.images) ? content.images : []).map((item, idx) => (
                         <div 
                             key={idx}
                             ref={el => imageRefs.current[idx] = el}

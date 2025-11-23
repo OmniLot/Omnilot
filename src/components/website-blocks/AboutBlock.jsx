@@ -116,7 +116,7 @@ export default function AboutBlock({ about, styleKit }) {
                 <div className="max-w-7xl mx-auto">
                     <h2 className="text-5xl font-bold text-center mb-16" style={{ fontFamily: fonts.heading }}>Meet Our Team</h2>
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        {about?.team?.map((member, idx) => (
+                        {(Array.isArray(about?.team) ? about.team : []).map((member, idx) => (
                             <div
                                 key={idx}
                                 onMouseEnter={() => setHoveredTeam(idx)}
@@ -181,7 +181,7 @@ export default function AboutBlock({ about, styleKit }) {
                 <div className="max-w-5xl mx-auto relative z-10">
                     <h2 className="text-5xl font-bold text-center mb-16" style={{ fontFamily: fonts.heading }}>Our Journey</h2>
                     <div className="space-y-8">
-                        {about?.milestones?.map((milestone, idx) => (
+                        {(Array.isArray(about?.milestones) ? about.milestones : []).map((milestone, idx) => (
                             <div 
                                 key={idx} 
                                 className={`flex gap-8 items-start ${idx % 2 === 0 ? 'flex-row' : 'flex-row-reverse'}`}

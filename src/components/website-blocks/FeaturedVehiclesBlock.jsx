@@ -60,7 +60,7 @@ export default function FeaturedVehiclesBlock({ vehicles, styleKit, onApplyNow }
                 </div>
                 
                 <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    {vehicles?.map((vehicle, idx) => (
+                    {(Array.isArray(vehicles) ? vehicles : []).map((vehicle, idx) => (
                         <div
                             key={idx}
                             ref={el => cardRefs.current[idx] = el}

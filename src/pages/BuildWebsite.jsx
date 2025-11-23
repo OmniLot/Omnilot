@@ -949,8 +949,45 @@ Generate a COMPLETE, PRODUCTION-READY dealership website now!`,
         */
     };
 
+    // Helper function to safely validate arrays
+    const safeArray = (arr) => {
+        if (!Array.isArray(arr)) return [];
+        // Filter out any invalid entries and ensure array length is reasonable
+        return arr.filter((item, idx) => {
+            // Limit array size to prevent memory issues
+            if (idx >= 1000) return false;
+            return item !== null && item !== undefined;
+        });
+    };
+
     const renderPageContent = () => {
         if (!generatedContent) return null;
+
+        // Safely validate and sanitize arrays in generated content
+        if (generatedContent.pages?.home?.featured_inventory) {
+            generatedContent.pages.home.featured_inventory = safeArray(generatedContent.pages.home.featured_inventory);
+        }
+        if (generatedContent.pages?.home?.testimonials) {
+            generatedContent.pages.home.testimonials = safeArray(generatedContent.pages.home.testimonials);
+        }
+        if (generatedContent.pages?.home?.gallery?.images) {
+            generatedContent.pages.home.gallery.images = safeArray(generatedContent.pages.home.gallery.images);
+        }
+        if (generatedContent.pages?.inventory?.vehicles) {
+            generatedContent.pages.inventory.vehicles = safeArray(generatedContent.pages.inventory.vehicles);
+        }
+        if (generatedContent.pages?.about?.team) {
+            generatedContent.pages.about.team = safeArray(generatedContent.pages.about.team);
+        }
+        if (generatedContent.pages?.about?.milestones) {
+            generatedContent.pages.about.milestones = safeArray(generatedContent.pages.about.milestones);
+        }
+        if (generatedContent.pages?.financing?.plans) {
+            generatedContent.pages.financing.plans = safeArray(generatedContent.pages.financing.plans);
+        }
+        if (generatedContent.pages?.financing?.faqs) {
+            generatedContent.pages.financing.faqs = safeArray(generatedContent.pages.financing.faqs);
+        }
 
         const styleKit = {
             theme: generatedContent.meta?.theme,

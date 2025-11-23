@@ -63,7 +63,7 @@ export default function TestimonialsBlock({ testimonials, styleKit }) {
                 </div>
                 
                 <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    {testimonials?.map((testimonial, idx) => (
+                    {(Array.isArray(testimonials) ? testimonials : []).map((testimonial, idx) => (
                         <div
                             key={idx}
                             ref={el => cardRefs.current[idx] = el}
@@ -91,7 +91,7 @@ export default function TestimonialsBlock({ testimonials, styleKit }) {
                                     
                                     {/* Rating */}
                                     <div className="flex gap-1 mb-4">
-                                        {[...Array(testimonial.rating || 5)].map((_, i) => (
+                                        {[...Array(Math.max(0, Math.min(5, Math.floor(testimonial.rating || 5))))].map((_, i) => (
                                             <Star 
                                                 key={i} 
                                                 className="w-4 h-4 fill-yellow-400 text-yellow-400 transition-transform hover:scale-125" 

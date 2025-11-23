@@ -337,8 +337,8 @@ export default function About() {
                       {(() => {
                         const card = contactCards[currentIndex];
                         return (
-                          <div className="flex flex-col items-center group">
-                            <div className="w-16 h-16 bg-blue-600/20 rounded-full flex items-center justify-center mb-4 border-2 border-blue-500/30 group-hover:bg-blue-600/40 group-hover:border-blue-500/60 transition-all duration-300">
+              <div className="flex flex-col items-center group">
+                <div className="w-16 h-16 bg-blue-600/20 rounded-full flex items-center justify-center mb-4 border-2 border-blue-500/30 group-hover:bg-blue-600/40 group-hover:border-blue-500/60 transition-all duration-300">
                               <card.icon className="w-8 h-8 text-blue-400 group-hover:text-blue-300 group-hover:scale-110 transition-all duration-300" />
                             </div>
                             <h3 className="text-xl font-bold text-white mb-2 group-hover:text-blue-300 transition-colors">{card.title}</h3>
@@ -371,7 +371,7 @@ export default function About() {
             <div className="hidden md:grid md:grid-cols-3 gap-8 text-center">
               {contactCards.map((card, index) => (
                 <div key={index} className="flex flex-col items-center group">
-                  <div className="w-16 h-16 bg-blue-600/20 rounded-full flex items-center justify-center mb-4 border-2 border-blue-500/30 group-hover:bg-blue-600/40 group-hover:border-blue-500/60 transition-all duration-300">
+                <div className="w-16 h-16 bg-blue-600/20 rounded-full flex items-center justify-center mb-4 border-2 border-blue-500/30 group-hover:bg-blue-600/40 group-hover:border-blue-500/60 transition-all duration-300">
                     <card.icon className="w-8 h-8 text-blue-400 group-hover:text-blue-300 group-hover:scale-110 transition-all duration-300" />
                   </div>
                   <h3 className="text-xl font-bold text-white mb-2 group-hover:text-blue-300 transition-colors">{card.title}</h3>

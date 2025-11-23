@@ -16,7 +16,7 @@ export default function InventoryBlock({ inventory, styleKit, onApplyNow, initia
     const theme = styleKit?.theme || {};
     const fonts = styleKit?.fonts || {};
     
-    const filteredVehicles = inventory?.vehicles?.filter(v => {
+    const filteredVehicles = (Array.isArray(inventory?.vehicles) ? inventory.vehicles : []).filter(v => {
         const categoryMatch = selectedCategory === 'all' || v.category === selectedCategory;
         const searchMatch = searchQuery === '' || 
             v.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -153,7 +153,7 @@ export default function InventoryBlock({ inventory, styleKit, onApplyNow, initia
 
                 {/* Vehicle Grid */}
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {filteredVehicles?.map((vehicle, idx) => {
+                    {(Array.isArray(filteredVehicles) ? filteredVehicles : []).map((vehicle, idx) => {
                         const badge = getBadge(idx);
                         const BadgeIcon = badge?.icon;
                         const isSelected = selectedForCompare.find(v => v.title === vehicle.title);
