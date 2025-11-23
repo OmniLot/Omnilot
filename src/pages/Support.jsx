@@ -1,13 +1,14 @@
 
-import React, { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { MessageCircle, Book, Mail, Phone, Search, ChevronDown, ChevronRight } from 'lucide-react';
+import { MessageCircle, Book, Mail, Phone, Search, ChevronDown, ChevronRight, ChevronLeft } from 'lucide-react';
 import HelpWidget from '../components/shared/HelpWidget';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const supportOptions = [
   {
@@ -136,6 +137,20 @@ export default function Support() {
     message: ''
   });
   const [isChatOpen, setIsChatOpen] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const nextSlide = () => {
+    setCurrentIndex((prev) => (prev + 1) % supportOptions.length);
+  };
+
+  const prevSlide = () => {
+    setCurrentIndex((prev) => (prev - 1 + supportOptions.length) % supportOptions.length);
+  };
+
+  useEffect(() => {
+    const timer = setInterval(nextSlide, 5000);
+    return () => clearInterval(timer);
+  }, []);
 
   const toggleFAQ = (categoryIndex, questionIndex) => {
     const key = `${categoryIndex}-${questionIndex}`;
@@ -253,8 +268,110 @@ export default function Support() {
           </div>
         </div>
 
-        {/* Support Options */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-20">
+        {/* Support Options - Mobile Carousel */}
+        <div className="md:hidden mb-12">
+          <div className="relative h-[380px] flex items-center">
+            {/* Navigation Buttons */}
+            <button
+              onClick={prevSlide}
+              className="absolute left-0 z-20 w-10 h-10 rounded-full bg-gray-800/80 hover:bg-gray-700 border border-gray-700 flex items-center justify-center text-white transition-all duration-300 hover:scale-110"
+            >
+              <ChevronLeft className="w-6 h-6" />
+            </button>
+
+            <button
+              onClick={nextSlide}
+              className="absolute right-0 z-20 w-10 h-10 rounded-full bg-gray-800/80 hover:bg-gray-700 border border-gray-700 flex items-center justify-center text-white transition-all duration-300 hover:scale-110"
+            >
+              <ChevronRight className="w-6 h-6" />
+            </button>
+
+            {/* Slides */}
+            <div className="w-full px-4">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={currentIndex}
+                  initial={{ opacity: 0, x: 100 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -100 }}
+                  transition={{ duration: 0.5 }}
+                  className="cursor-grab active:cursor-grabbing"
+                >
+                  {(() => {
+                    const option = supportOptions[currentIndex];
+                    const cardElement = (
+                      <Card className={`bg-gray-800/50 border-gray-700 hover:bg-gray-800 transition-all duration-300 group cursor-pointer relative overflow-hidden ${option.hoverClasses.card} min-h-[320px] flex flex-col justify-center`}>
+                        <CardHeader className="text-center relative z-10 py-2 px-3">
+                          <div className={`w-16 h-16 bg-gradient-to-r ${option.gradient} rounded-full flex items-center justify-center mx-auto mb-2 group-hover:scale-110 transition-transform shadow-lg ${option.hoverClasses.iconContainer}`}>
+                            <option.icon className={`w-8 h-8 text-white transition-transform duration-300 ${option.hoverClasses.icon}`} />
+                          </div>
+                          <CardTitle className="text-2xl text-white group-hover:text-blue-300 transition-colors duration-300 mb-1.5">
+                            {option.title}
+                          </CardTitle>
+                          <p className="text-lg text-gray-300 group-hover:text-gray-200 transition-colors duration-300 leading-snug">{option.description}</p>
+                        </CardHeader>
+                        <CardContent className="text-center relative z-10 py-2 px-3">
+                          <div 
+                            aria-hidden="true"
+                            className={`w-full inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-gradient-to-r ${option.gradient} hover:shadow-lg hover:shadow-blue-500/25 mb-1.5 transition-all duration-300 text-white font-medium ${option.hoverClasses.button} h-9 px-4 py-2`}
+                          >
+                            {option.action}
+                          </div>
+                          <p className="text-xs text-gray-400 group-hover:text-gray-300 transition-colors duration-300">{option.availability}</p>
+                        </CardContent>
+
+                        {/* Floating particles on hover */}
+                        <div className="absolute -top-2 -right-2 w-2 h-2 bg-blue-400 rounded-full animate-ping opacity-0 group-hover:opacity-60 transition-opacity duration-300"></div>
+                        <div className="absolute -bottom-2 -left-2 w-1.5 h-1.5 bg-purple-400 rounded-full animate-ping opacity-0 group-hover:opacity-40 transition-opacity duration-300 delay-200"></div>
+                      </Card>
+                    );
+
+                    if (option.id === 'live-chat') {
+                      return (
+                        <div onClick={() => handleSupportOptionClick(option.id)} className="focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-gray-900 rounded-lg">
+                          {cardElement}
+                        </div>
+                      );
+                    } else if (option.id === 'phone-support') {
+                      const cleanedPhoneNumber = '15035926043';
+                      const telHref = `tel:+${cleanedPhoneNumber}`; 
+                      return (
+                        <a href={telHref} className="focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-gray-900 rounded-lg">
+                          {cardElement}
+                        </a>
+                      );
+                    } else {
+                      const pageName = option.id === 'email-support' ? 'EmailSupport' : 'Documentation';
+                      return (
+                        <Link to={createPageUrl(pageName)} className="focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-900 rounded-lg">
+                          {cardElement}
+                        </Link>
+                      );
+                    }
+                  })()}
+                </motion.div>
+              </AnimatePresence>
+            </div>
+          </div>
+
+          {/* Indicators */}
+          <div className="flex justify-center gap-2 mt-8">
+            {supportOptions.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => setCurrentIndex(index)}
+                className={`h-2 rounded-full transition-all duration-300 ${
+                  index === currentIndex 
+                    ? 'w-8 bg-blue-500' 
+                    : 'w-2 bg-gray-600 hover:bg-gray-500'
+                }`}
+              />
+            ))}
+          </div>
+        </div>
+
+        {/* Support Options - Desktop Grid */}
+        <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-20">
           {supportOptions.map((option) => {
             const cardElement = (
               <Card className={`bg-gray-800/50 border-gray-700 hover:bg-gray-800 transition-all duration-300 group cursor-pointer relative overflow-hidden ${option.hoverClasses.card}`}>
@@ -291,15 +408,7 @@ export default function Support() {
                 </div>
               );
             } else if (option.id === 'phone-support') {
-              // Construct a tel: link for phone support - this will need a specific phone number
-              // For now, if availability is 'Available 24/7', we might remove the tel: link or use a placeholder
-              // As the prompt explicitly stated to update availability and didn't mention changing behavior,
-              // I'll keep the tel: link logic but acknowledge it might not be ideal without a number.
-              // Assuming a default number for demo if no specific is given by the user in future,
-              // or relying on a future update to provide one. For now, it will simply point to "tel:Available24/7" which won't work as a phone call.
-              // Reverting this specific part back to its original logic IF a phone number is needed for the 'tel:' link
-              // However, as per prompt, just changing availability text. The original availability: '1+(503)-592-6043' would be used for the tel link.
-              // With "Available 24/7" it won't work. For now, I'll ensure no syntax error by setting a dummy tel.
+              
               const cleanedPhoneNumber = '15035926043'; // Assuming a static number for the link, as "Available 24/7" isn't a phone number
               const telHref = `tel:+${cleanedPhoneNumber}`; 
               return (
@@ -319,7 +428,7 @@ export default function Support() {
         </div>
 
         {/* FAQ Section */}
-        <div className="grid lg:grid-cols-3 gap-12">
+        <div className="grid lg:grid-cols-3 gap-10 lg:gap-12">
           <div className="lg:col-span-2">
             <h2 className="text-3xl font-bold text-white mb-8">Frequently Asked Questions</h2>
             
@@ -369,11 +478,11 @@ export default function Support() {
 
           {/* Contact Form */}
           <div>
-            <Card className="sticky top-24 bg-gray-800/50 border-gray-700 backdrop-blur-sm relative overflow-hidden">
+            <Card className="lg:sticky lg:top-24 bg-gray-800/50 border-gray-700 backdrop-blur-sm relative overflow-hidden">
               
               <CardHeader className="relative z-10">
                 <CardTitle className="text-2xl text-white">Contact Support</CardTitle>
-                <p className="text-gray-400">Can't find what you're looking for? Send us a message.</p>
+                <p className="text-gray-400">Can&apos;t find what you&apos;re looking for? Send us a message.</p>
               </CardHeader>
               <CardContent className="space-y-4 relative z-10">
                 <div>

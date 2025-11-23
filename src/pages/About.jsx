@@ -1,6 +1,8 @@
+import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Users, Target, Lightbulb, Award, MapPin, Mail, Phone } from 'lucide-react';
+import { Users, Target, Lightbulb, Award, MapPin, Mail, Phone, ChevronLeft, ChevronRight } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const companyValues = [
   {
@@ -70,7 +72,40 @@ const aboutSections = [
   }
 ];
 
+const contactCards = [
+  {
+    icon: MapPin,
+    title: 'Headquarters',
+    content: 'Portland, Oregon<br />United States'
+  },
+  {
+    icon: Mail,
+    title: 'Email',
+    content: 'omni.lotservices@gmail.com'
+  },
+  {
+    icon: Phone,
+    title: 'Phone',
+    content: '1+(503)-592-6043<br />Available 24/7'
+  }
+];
+
 export default function About() {
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const nextSlide = () => {
+    setCurrentIndex((prev) => (prev + 1) % contactCards.length);
+  };
+
+  const prevSlide = () => {
+    setCurrentIndex((prev) => (prev - 1 + contactCards.length) % contactCards.length);
+  };
+
+  useEffect(() => {
+    const timer = setInterval(nextSlide, 5000);
+    return () => clearInterval(timer);
+  }, []);
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-slate-800 text-white relative overflow-hidden">
       <style>{`
@@ -267,30 +302,82 @@ export default function About() {
         {/* Contact Information */}
         <Card className="relative overflow-hidden bg-gray-800/50 border border-gray-700 shadow-2xl backdrop-blur-sm">
           <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-transparent rounded-lg opacity-50"></div>
-          <CardContent className="relative z-10 p-12">
-            <h2 className="text-3xl font-bold text-white text-center mb-12">Get In Touch</h2>
-            <div className="grid md:grid-cols-3 gap-8 text-center">
-              <div className="flex flex-col items-center group">
-                <div className="w-16 h-16 bg-blue-600/20 rounded-full flex items-center justify-center mb-4 border-2 border-blue-500/30 group-hover:bg-blue-600/40 group-hover:border-blue-500/60 transition-all duration-300">
-                  <MapPin className="w-8 h-8 text-blue-400 group-hover:text-blue-300 group-hover:scale-110 transition-all duration-300" />
+          <CardContent className="relative z-10 p-6 md:p-12">
+            <h2 className="text-3xl font-bold text-white text-center mb-4 md:mb-12">Get In Touch</h2>
+            
+            {/* Mobile Carousel */}
+            <div className="md:hidden">
+              <div className="relative h-[280px] flex items-center">
+                {/* Navigation Buttons */}
+                <button
+                  onClick={prevSlide}
+                  className="absolute left-0 z-20 w-10 h-10 rounded-full bg-gray-800/80 hover:bg-gray-700 border border-gray-700 flex items-center justify-center text-white transition-all duration-300 hover:scale-110"
+                >
+                  <ChevronLeft className="w-6 h-6" />
+                </button>
+
+                <button
+                  onClick={nextSlide}
+                  className="absolute right-0 z-20 w-10 h-10 rounded-full bg-gray-800/80 hover:bg-gray-700 border border-gray-700 flex items-center justify-center text-white transition-all duration-300 hover:scale-110"
+                >
+                  <ChevronRight className="w-6 h-6" />
+                </button>
+
+                {/* Slides */}
+                <div className="w-full px-4">
+                  <AnimatePresence mode="wait">
+                    <motion.div
+                      key={currentIndex}
+                      initial={{ opacity: 0, x: 100 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: -100 }}
+                      transition={{ duration: 0.5 }}
+                      className="text-center"
+                    >
+                      {(() => {
+                        const card = contactCards[currentIndex];
+                        return (
+                          <div className="flex flex-col items-center group">
+                            <div className="w-16 h-16 bg-blue-600/20 rounded-full flex items-center justify-center mb-4 border-2 border-blue-500/30 group-hover:bg-blue-600/40 group-hover:border-blue-500/60 transition-all duration-300">
+                              <card.icon className="w-8 h-8 text-blue-400 group-hover:text-blue-300 group-hover:scale-110 transition-all duration-300" />
+                            </div>
+                            <h3 className="text-xl font-bold text-white mb-2 group-hover:text-blue-300 transition-colors">{card.title}</h3>
+                            <p className="text-gray-400 group-hover:text-gray-300 transition-colors" dangerouslySetInnerHTML={{ __html: card.content }} />
+                          </div>
+                        );
+                      })()}
+                    </motion.div>
+                  </AnimatePresence>
                 </div>
-                <h3 className="text-xl font-bold text-white mb-2 group-hover:text-blue-300 transition-colors">Headquarters</h3>
-                <p className="text-gray-400 group-hover:text-gray-300 transition-colors">Portland, Oregon<br />United States</p>
               </div>
-              <div className="flex flex-col items-center group">
-                <div className="w-16 h-16 bg-blue-600/20 rounded-full flex items-center justify-center mb-4 border-2 border-blue-500/30 group-hover:bg-blue-600/40 group-hover:border-blue-500/60 transition-all duration-300">
-                  <Mail className="w-8 h-8 text-blue-400 group-hover:text-blue-300 group-hover:scale-110 transition-all duration-300" />
+
+              {/* Indicators */}
+              <div className="flex justify-center gap-2 mt-3">
+                {contactCards.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setCurrentIndex(index)}
+                    className={`h-2 rounded-full transition-all duration-300 ${
+                      index === currentIndex 
+                        ? 'w-8 bg-blue-500' 
+                        : 'w-2 bg-gray-600 hover:bg-gray-500'
+                    }`}
+                  />
+                ))}
+              </div>
+            </div>
+
+            {/* Desktop Grid */}
+            <div className="hidden md:grid md:grid-cols-3 gap-8 text-center">
+              {contactCards.map((card, index) => (
+                <div key={index} className="flex flex-col items-center group">
+                  <div className="w-16 h-16 bg-blue-600/20 rounded-full flex items-center justify-center mb-4 border-2 border-blue-500/30 group-hover:bg-blue-600/40 group-hover:border-blue-500/60 transition-all duration-300">
+                    <card.icon className="w-8 h-8 text-blue-400 group-hover:text-blue-300 group-hover:scale-110 transition-all duration-300" />
+                  </div>
+                  <h3 className="text-xl font-bold text-white mb-2 group-hover:text-blue-300 transition-colors">{card.title}</h3>
+                  <p className="text-gray-400 group-hover:text-gray-300 transition-colors" dangerouslySetInnerHTML={{ __html: card.content }} />
                 </div>
-                <h3 className="text-xl font-bold text-white mb-2 group-hover:text-blue-300 transition-colors">Email</h3>
-                <p className="text-gray-400 group-hover:text-gray-300 transition-colors">omni.lotservices@gmail.com</p>
-              </div>
-              <div className="flex flex-col items-center group">
-                <div className="w-16 h-16 bg-blue-600/20 rounded-full flex items-center justify-center mb-4 border-2 border-blue-500/30 group-hover:bg-blue-600/40 group-hover:border-blue-500/60 transition-all duration-300">
-                  <Phone className="w-8 h-8 text-blue-400 group-hover:text-blue-300 group-hover:scale-110 transition-all duration-300" />
-                </div>
-                <h3 className="text-xl font-bold text-white mb-2 group-hover:text-blue-300 transition-colors">Phone</h3>
-                <p className="text-gray-400 group-hover:text-gray-300 transition-colors">1+(503)-592-6043<br />Available 24/7</p>
-              </div>
+              ))}
             </div>
           </CardContent>
         </Card>

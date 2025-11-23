@@ -15,6 +15,11 @@ MONGODB_URI=your_mongodb_connection_string
 JWT_SECRET=your_jwt_secret_key
 PORT=3001
 FRONTEND_URL=http://localhost:5173
+
+# Base44 API Configuration (for LLM integration)
+BASE44_API_KEY=your_base44_api_key_here
+BASE44_APP_ID=69190c2bb23492bdf2bfe5fe
+BASE44_API_BASE=https://api.base44.com
 ```
 
 3. Start the server:
@@ -44,6 +49,17 @@ The server will run on `http://localhost:3001`
   - Headers: `Authorization: Bearer <token>`
   - Body: `{ full_name?, phone? }`
   - Returns: `{ user }`
+
+### Integrations
+
+- `POST /api/integrations/llm` - Invoke Base44 LLM Integration (requires authentication)
+  - Headers: `Authorization: Bearer <token>`
+  - Body: `{ prompt: string, response_json_schema?: object, options?: object }`
+  - Returns: `{ success: true, data: <llm_response> }`
+
+- `GET /api/integrations/health` - Check Base44 integration configuration (requires authentication)
+  - Headers: `Authorization: Bearer <token>`
+  - Returns: `{ configured: boolean, hasApiKey: boolean, hasAppId: boolean, apiBase: string }`
 
 ## MongoDB Schema
 

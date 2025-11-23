@@ -1,6 +1,7 @@
-import React from 'react';
+import { useState, useEffect } from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 import { Star, Quote } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const testimonials = [
     {
@@ -30,8 +31,23 @@ const testimonials = [
 ];
 
 export default function TestimonialsSection() {
+    const [currentIndex, setCurrentIndex] = useState(0);
+
+    const nextSlide = () => {
+        setCurrentIndex((prev) => (prev + 1) % testimonials.length);
+    };
+
+    const prevSlide = () => {
+        setCurrentIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length);
+    };
+
+    useEffect(() => {
+        const timer = setInterval(nextSlide, 5000);
+        return () => clearInterval(timer);
+    }, []);
+
     return (
-        <section className="py-12 sm:py-20 px-4 sm:px-6 bg-gradient-to-b from-gray-900 to-gray-800 relative overflow-hidden">
+        <section className="py-8 sm:py-20 px-4 sm:px-6 bg-gradient-to-b from-gray-900 to-gray-800 relative overflow-hidden">
             {/* Background effects */}
             <div className="absolute inset-0 opacity-5">
                 <div className="absolute top-20 left-10 w-64 h-64 bg-blue-500 rounded-full blur-3xl"></div>
@@ -40,8 +56,8 @@ export default function TestimonialsSection() {
 
             <div className="max-w-7xl mx-auto relative z-10">
                 {/* Section header */}
-                <div className="text-center mb-12 sm:mb-16 px-4">
-                    <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-3 sm:mb-4">
+                <div className="text-center mb-8 sm:mb-16 px-4 hidden md:block">
+                    <h2 className="text-4xl sm:text-4xl md:text-5xl font-bold text-white mb-2 sm:mb-4">
                         Trusted by <span className="text-blue-400">Leading Dealerships</span>
                     </h2>
                     <p className="text-base sm:text-xl text-gray-300 max-w-3xl mx-auto">
@@ -49,27 +65,95 @@ export default function TestimonialsSection() {
                     </p>
                 </div>
 
-                {/* Testimonials grid */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 px-2">
+                {/* Mobile Carousel */}
+                <div className="md:hidden relative hidden">
+                    <div className="relative h-[500px] flex items-center px-4">
+                        <div className="w-full">
+                            <AnimatePresence mode="wait">
+                                <motion.div
+                                    key={currentIndex}
+                                    initial={{ opacity: 0, x: 100 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    exit={{ opacity: 0, x: -100 }}
+                                    transition={{ duration: 0.5 }}
+                                    drag="x"
+                                    dragConstraints={{ left: 0, right: 0 }}
+                                    dragElastic={0.2}
+                                    onDragEnd={(e, { offset, velocity }) => {
+                                        const swipe = Math.abs(offset.x) * velocity.x;
+                                        if (swipe < -10000) {
+                                            nextSlide();
+                                        } else if (swipe > 10000) {
+                                            prevSlide();
+                                        }
+                                    }}
+                                    className="cursor-grab active:cursor-grabbing"
+                                >
+                                    <Card className="bg-gray-800/50 border-gray-700">
+                                        <CardContent className="p-6">
+                                            <Quote className="w-10 h-10 text-blue-400 mb-4 opacity-50" />
+                                            
+                                            <div className="flex gap-1 mb-4">
+                                                {[...Array(testimonials[currentIndex].rating)].map((_, i) => (
+                                                    <Star key={i} className="w-5 h-5 fill-yellow-400 text-yellow-400" />
+                                                ))}
+                                            </div>
+
+                                            <p className="text-base text-gray-300 mb-6 leading-relaxed">
+                                                &ldquo;{testimonials[currentIndex].text}&rdquo;
+                                            </p>
+
+                                            <div className="flex items-center gap-4">
+                                                <img 
+                                                    src={testimonials[currentIndex].image} 
+                                                    alt={testimonials[currentIndex].name}
+                                                    className="w-12 h-12 rounded-full object-cover"
+                                                />
+                                                <div>
+                                                    <p className="text-base text-white font-semibold">{testimonials[currentIndex].name}</p>
+                                                    <p className="text-sm text-gray-400">{testimonials[currentIndex].role}</p>
+                                                    <p className="text-sm text-blue-400">{testimonials[currentIndex].company}</p>
+                                                </div>
+                                            </div>
+                                        </CardContent>
+                                    </Card>
+                                </motion.div>
+                            </AnimatePresence>
+                        </div>
+                    </div>
+
+                    <div className="flex justify-center gap-2 mt-6">
+                        {testimonials.map((_, index) => (
+                            <button
+                                key={index}
+                                onClick={() => setCurrentIndex(index)}
+                                className={`h-2 rounded-full transition-all duration-300 ${
+                                    index === currentIndex 
+                                        ? 'w-8 bg-blue-500' 
+                                        : 'w-2 bg-gray-600 hover:bg-gray-500'
+                                }`}
+                            />
+                        ))}
+                    </div>
+                </div>
+
+                {/* Desktop Grid */}
+                <div className="hidden md:grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 px-2">
                     {testimonials.map((testimonial, index) => (
                         <Card key={index} className="bg-gray-800/50 border-gray-700 hover:bg-gray-800 transition-all duration-300 hover:shadow-2xl hover:shadow-blue-500/10 hover:scale-[1.02]">
                             <CardContent className="p-4 sm:p-6">
-                                {/* Quote icon */}
                                 <Quote className="w-8 h-8 sm:w-10 sm:h-10 text-blue-400 mb-3 sm:mb-4 opacity-50" />
                                 
-                                {/* Rating */}
                                 <div className="flex gap-1 mb-3 sm:mb-4">
                                     {[...Array(testimonial.rating)].map((_, i) => (
                                         <Star key={i} className="w-4 h-4 sm:w-5 sm:h-5 fill-yellow-400 text-yellow-400" />
                                     ))}
                                 </div>
 
-                                {/* Testimonial text */}
                                 <p className="text-sm sm:text-base text-gray-300 mb-4 sm:mb-6 leading-relaxed">
-                                    "{testimonial.text}"
+                                    &ldquo;{testimonial.text}&rdquo;
                                 </p>
 
-                                {/* Author info */}
                                 <div className="flex items-center gap-3 sm:gap-4">
                                     <img 
                                         src={testimonial.image} 
@@ -88,7 +172,7 @@ export default function TestimonialsSection() {
                 </div>
 
                 {/* Stats section */}
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-8 mt-12 sm:mt-16 pt-12 sm:pt-16 border-t border-gray-700 px-2">
+                <div className="hidden md:grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-8 mt-12 sm:mt-16 pt-12 sm:pt-16 border-t border-gray-700 px-2">
                     <div className="text-center">
                         <div className="text-3xl sm:text-4xl md:text-5xl font-bold text-blue-400 mb-1 sm:mb-2">500+</div>
                         <div className="text-xs sm:text-sm md:text-base text-gray-400">Active Dealerships</div>

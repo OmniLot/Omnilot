@@ -25,11 +25,10 @@ export default function Auth() {
     // Check if user is already authenticated
     useEffect(() => {
         if (isAuthenticated()) {
-            // User is already logged in, redirect to dashboard
-            navigate(createPageUrl('Dashboard'));
+                    navigate(createPageUrl('Dashboard'));
         } else {
-            setIsCheckingAuth(false);
-        }
+                setIsCheckingAuth(false);
+            }
     }, [navigate]);
 
     const handleInputChange = (e) => {

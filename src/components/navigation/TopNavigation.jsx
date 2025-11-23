@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { Button } from "@/components/ui/button";
 import { Menu, X, ChevronDown, LogIn } from 'lucide-react';
@@ -30,6 +30,19 @@ const navItems = [
 export default function TopNavigation() {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [activeDropdown, setActiveDropdown] = useState(null);
+    const location = useLocation();
+
+    // Helper function to check if a route is active
+    const isActiveRoute = (href) => {
+        if (href === '#') return false;
+        return location.pathname === href;
+    };
+
+    // Helper function to check if any dropdown item is active
+    const isDropdownActive = (dropdown) => {
+        if (!dropdown) return false;
+        return dropdown.some(subItem => location.pathname === subItem.href);
+    };
 
     return (
         <nav className="fixed top-0 left-0 right-0 z-50 bg-gray-900/95 backdrop-blur-sm border-b border-gray-800">
@@ -51,7 +64,11 @@ export default function TopNavigation() {
                                         onMouseEnter={() => setActiveDropdown(index)}
                                         onMouseLeave={() => setActiveDropdown(null)}
                                     >
-                                        <button className="flex items-center text-gray-300 hover:text-blue-400 transition-colors duration-200 py-2">
+                                        <button className={`flex items-center transition-colors duration-200 py-2 ${
+                                            isDropdownActive(item.dropdown)
+                                                ? 'text-blue-400 font-semibold'
+                                                : 'text-gray-300 hover:text-blue-400'
+                                        }`}>
                                             {item.name}
                                             <ChevronDown className="w-4 h-4 ml-1" />
                                         </button>
@@ -61,7 +78,11 @@ export default function TopNavigation() {
                                                     <Link
                                                         key={subIndex}
                                                         to={subItem.href}
-                                                        className="block px-4 py-2 text-gray-300 hover:text-blue-400 hover:bg-gray-700 transition-colors duration-200"
+                                                        className={`block px-4 py-2 transition-colors duration-200 ${
+                                                            isActiveRoute(subItem.href)
+                                                                ? 'text-blue-400 font-semibold bg-gray-700'
+                                                                : 'text-gray-300 hover:text-blue-400 hover:bg-gray-700'
+                                                        }`}
                                                     >
                                                         {subItem.name}
                                                     </Link>
@@ -72,7 +93,11 @@ export default function TopNavigation() {
                                 ) : (
                                     <Link
                                         to={item.href}
-                                        className="text-gray-300 hover:text-blue-400 transition-colors duration-200"
+                                        className={`transition-colors duration-200 ${
+                                            isActiveRoute(item.href)
+                                                ? 'text-blue-400 font-semibold border-b-2 border-blue-400 pb-1'
+                                                : 'text-gray-300 hover:text-blue-400'
+                                        }`}
                                     >
                                         {item.name}
                                     </Link>
@@ -121,7 +146,11 @@ export default function TopNavigation() {
                                     <div>
                                         <button
                                             onClick={() => setActiveDropdown(activeDropdown === index ? null : index)}
-                                            className="flex items-center justify-between w-full text-gray-300 hover:text-blue-400 py-2"
+                                            className={`flex items-center justify-between w-full py-2 font-semibold transition-colors ${
+                                                isDropdownActive(item.dropdown)
+                                                    ? 'text-blue-400'
+                                                    : 'text-gray-300 hover:text-blue-400'
+                                            }`}
                                         >
                                             {item.name}
                                             <ChevronDown className={`w-4 h-4 transition-transform ${activeDropdown === index ? 'rotate-180' : ''}`} />
@@ -132,7 +161,11 @@ export default function TopNavigation() {
                                                     <Link
                                                         key={subIndex}
                                                         to={subItem.href}
-                                                        className="block text-gray-400 hover:text-blue-400 py-2"
+                                                        className={`block py-2 font-medium transition-colors ${
+                                                            isActiveRoute(subItem.href)
+                                                                ? 'text-blue-400 font-semibold'
+                                                                : 'text-gray-400 hover:text-blue-400'
+                                                        }`}
                                                         onClick={() => setMobileMenuOpen(false)}
                                                     >
                                                         {subItem.name}
@@ -144,7 +177,11 @@ export default function TopNavigation() {
                                 ) : (
                                     <Link
                                         to={item.href}
-                                        className="block text-gray-300 hover:text-blue-400 py-2"
+                                        className={`block py-2 font-semibold transition-colors ${
+                                            isActiveRoute(item.href)
+                                                ? 'text-blue-400 border-l-4 border-blue-400 pl-3 -ml-4'
+                                                : 'text-gray-300 hover:text-blue-400'
+                                        }`}
                                         onClick={() => setMobileMenuOpen(false)}
                                     >
                                         {item.name}
@@ -152,12 +189,7 @@ export default function TopNavigation() {
                                 )}
                             </div>
                         ))}
-                        <div className="pt-4 space-y-2">
-                            <Link to={createPageUrl('Support')} onClick={() => setMobileMenuOpen(false)}>
-                                <Button variant="outline" className="w-full border-gray-700 text-gray-300 hover:text-white">
-                                    Contact Sales
-                                </Button>
-                            </Link>
+                        <div className="pt-4 space-y-10">
                             <Link to={createPageUrl('BookDemo')} onClick={() => setMobileMenuOpen(false)}>
                                 <Button className="w-full bg-blue-600 hover:bg-blue-700">
                                     Book Demo

@@ -40,6 +40,9 @@ MONGODB_URI=your_mongodb_connection_string
 JWT_SECRET=your_jwt_secret_key_here
 PORT=3001
 FRONTEND_URL=http://localhost:5173
+BASE44_API_KEY=your_base44_api_key
+BASE44_APP_ID=your_base44_app_id
+BASE44_API_BASE=https://app.base44.com/api
 ```
 
 4. Start the backend server:
@@ -75,14 +78,8 @@ The frontend will run on `http://localhost:5173`
 - ✅ User profile management
 - ✅ JWT-based session management
 - ✅ MongoDB database integration
-
-### Temporarily Disabled (To Be Rebuilt)
-- ⏸️ Website generation (BuildWebsite page)
-- ⏸️ Appointment booking (BookDemo page)
-- ⏸️ AI chatbot (HelpWidget)
-- ⏸️ Generated website storage
-
-These features will be rebuilt with MongoDB backend in future updates.
+- ✅ AI-powered website generation using Base44 LLM API
+- ✅ Generated website storage in MongoDB
 
 ## Authentication
 

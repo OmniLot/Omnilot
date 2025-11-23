@@ -180,9 +180,9 @@ export default function Dashboard() {
             if (authLoading) return;
             
             if (!authUser) {
-                navigate(createPageUrl('Auth'));
-                return;
-            }
+                    navigate(createPageUrl('Auth'));
+                    return;
+                }
             
             try {
                 // Get fresh user data
@@ -206,7 +206,7 @@ export default function Dashboard() {
                         phone: authUser.phone || ''
                     }));
                 } else {
-                    navigate(createPageUrl('Auth'));
+                navigate(createPageUrl('Auth'));
                 }
             } finally {
                 setIsLoadingUser(false);
@@ -417,9 +417,9 @@ export default function Dashboard() {
                                 variant="outline" 
                                 size="sm"
                                 onClick={handleLogout}
-                                className="border-gray-700 text-gray-300 hover:text-white hover:border-red-500"
+                                className="border-gray-700 text-black hover:text-white hover:border-blue-400 bg-white hover:bg-transparent"
                             >
-                                <LogOut className="w-4 h-4 mr-2" />
+                                <LogOut className="w-4 h-4 mr-1" />
                                 Logout
                             </Button>
                         </div>

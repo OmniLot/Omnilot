@@ -539,7 +539,7 @@ export default function Gallery() {
           </h1>
           <p className="text-xl text-gray-300 max-w-3xl mx-auto">
             Explore stunning dealership websites and ad campaigns built with Omni.Lot AI technology. 
-            Each one is uniquely designed and optimized for maximum conversions.
+            <span className="hidden sm:inline"> Each one is uniquely designed and optimized for maximum conversions.</span>
           </p>
         </div>
 

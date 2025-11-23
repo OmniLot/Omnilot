@@ -1,5 +1,4 @@
 
-import React from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Building, Shield, BarChart, Headphones, Globe, PenSquare, PhoneCall, MessagesSquare, Calculator } from 'lucide-react';
@@ -134,7 +133,7 @@ export default function Enterprise() {
             Ready to Scale Your Dealership Group?
           </h2>
           <p className="text-xl text-gray-300 mb-8">
-            Let's discuss your enterprise needs and create a custom solution.
+            Let&apos;s discuss your enterprise needs and create a custom solution.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link to={createPageUrl('BookDemo')}>
@@ -142,9 +141,6 @@ export default function Enterprise() {
                 Request Enterprise Demo
               </Button>
             </Link>
-            <Button variant="outline" className="border-gray-600 text-gray-800 hover:bg-gray-800 hover:border-blue-400 hover:text-white text-lg px-8 py-3 rounded-xl">
-              Download Enterprise Datasheet
-            </Button>
           </div>
         </div>
       </div>

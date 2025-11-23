@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Search, Book, Zap, Settings, Globe, BarChart, MessageSquare, ArrowRight } from 'lucide-react';
@@ -94,7 +94,7 @@ export default function Documentation() {
           </h1>
           <p className="text-xl text-gray-300 max-w-3xl mx-auto mb-8">
             Everything you need to get started with Omni.Lot. From basic setup 
-            to advanced integrations, we've got you covered.
+            to advanced integrations, we&apos;ve got you covered.
           </p>
           
           {/* Search */}
@@ -152,9 +152,6 @@ export default function Documentation() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button className="bg-blue-600 hover:bg-blue-700 text-lg px-8 py-3 rounded-xl">
               Schedule Onboarding Call
-            </Button>
-            <Button className="bg-blue-600 hover:bg-blue-700 text-white text-lg px-8 py-3 rounded-xl">
-              Watch Demo Videos
             </Button>
           </div>
         </div>

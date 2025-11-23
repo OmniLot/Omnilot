@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
-// import { base44 } from '@/api/base44Client'; // Temporarily disabled - will be replaced with MongoDB API
+import { invokeLLM } from '@/api/integrations';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ArrowLeft, Loader2, Sparkles, Save, Send, Laptop, Smartphone, PanelLeftClose, PanelLeft, Wand2, FileText, Maximize2, CheckCircle2, RefreshCw } from 'lucide-react';
@@ -61,15 +61,7 @@ export default function BuildWebsite() {
     const generateWebsite = async (userPrompt) => {
         setIsGenerating(true);
         try {
-            // TODO: Replace with MongoDB API call for LLM integration
-            // Temporarily disabled - will be replaced with custom LLM API
-            // For now, show error message
-            alert('Website generation feature is temporarily disabled. This will be rebuilt with MongoDB backend.');
-            setIsGenerating(false);
-            return;
-            
-            /* Commented out - will be replaced with custom API
-            const response = await base44.integrations.Core.InvokeLLM({
+            const response = await invokeLLM({
                 prompt: `🚗 ULTIMATE AUTO DEALERSHIP WEBSITE GENERATOR 
 Generate a complete, production-ready dealership website for: "${userPrompt}"
 
@@ -788,7 +780,7 @@ Generate a COMPLETE, PRODUCTION-READY dealership website now!`,
                 }
             });
 
-            // setGeneratedContent(response); // Commented out - will be replaced
+            setGeneratedContent(response);
             
             const vehicleCount = response?.pages?.inventory?.vehicles?.length || 0;
             const themeName = response?.meta?.theme?.name || 'Professional';

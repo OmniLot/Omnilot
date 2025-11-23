@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { Button } from "@/components/ui/button";
@@ -22,7 +22,7 @@ export default function HeroSection() {
     };
 
     return (
-        <div className="relative min-h-screen bg-gradient-to-b from-gray-900 via-gray-900 to-gray-800 flex items-center justify-center overflow-hidden">
+        <div className="relative min-h-screen bg-gradient-to-b from-gray-900 via-gray-900 to-gray-800 flex items-center md:justify-center justify-start overflow-hidden">
             <style>
                 {`
                 .shooting-star {
@@ -115,7 +115,7 @@ export default function HeroSection() {
             </div>
 
             {/* Glowing Cascade-blue arc along bottom */}
-            <div className="absolute bottom-0 left-0 right-0 h-32">
+            <div className="absolute bottom-0 left-0 right-0 h-20">
                 <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-[120%] h-16 bg-gradient-to-r from-transparent via-blue-500/30 to-transparent rounded-full blur-xl"></div>
                 <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-full h-8 bg-gradient-to-r from-transparent via-blue-400/50 to-transparent rounded-full blur-lg"></div>
             </div>
@@ -133,22 +133,22 @@ export default function HeroSection() {
                 <div className="absolute bottom-32 left-3/4 w-12 h-12 border border-cyan-400 rounded-full animate-pulse delay-2500 sm:hidden"></div>
             </div>
 
-            <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 py-8 sm:py-16 text-center">
+            <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 pt-2 pb-2 sm:py-16 text-center mt-[5vh] md:mt-0">
                 {/* Main headline - BIGGER */}
-                <h1 className="text-4xl sm:text-6xl md:text-8xl font-thin text-white mb-6 sm:mb-8 tracking-tight leading-tight">
+                <h1 className="text-[2.75rem] sm:text-6xl md:text-8xl font-thin text-white mb-6 sm:mb-8 tracking-tight leading-[1.2] sm:leading-tight">
                     What should your <span className="bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent relative cursor-pointer group transition-all duration-500 hover:drop-shadow-[0_0_20px_rgba(59,130,246,0.7)] fade-in-backed-by-ai">
                         dealership
                     </span> build today?
                 </h1>
 
                 {/* Sub-headline - BIGGER */}
-                <p className="text-lg sm:text-xl md:text-3xl text-gray-300 font-light mb-10 sm:mb-14 leading-relaxed max-w-3xl mx-auto px-2">
+                <p className="text-lg sm:text-xl md:text-3xl text-gray-300 font-light mb-6 sm:mb-14 leading-relaxed max-w-3xl mx-auto px-2">
                     Create AI-powered websites, marketing, and automations 
                     for your dealership with <span className="text-blue-400 font-medium">Omni.Lot</span>
                 </p>
 
                 {/* Input field with Go button - BIGGER */}
-                <div className="relative mb-8 sm:mb-10 max-w-2xl sm:max-w-3xl mx-auto px-2">
+                <div className="relative mb-6 sm:mb-10 max-w-2xl sm:max-w-3xl mx-auto px-2">
                     <div className="flex gap-3">
                         <Input
                             type="text"

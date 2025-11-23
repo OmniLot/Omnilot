@@ -54,11 +54,11 @@ export default function Footer() {
                                 <span className="text-blue-400">Omni</span>.Lot
                             </span>
                         </Link>
-                        <p className="text-gray-400 mb-6 leading-relaxed">
+                        <p className="text-gray-400 mb-6 leading-relaxed hidden md:block">
                             AI-powered dealership solutions that transform how you sell vehicles, engage customers, and grow your business.
                         </p>
                         <div className="space-y-3">
-                            <a href="mailto:support@omni.lot" className="flex items-center text-gray-400 hover:text-blue-400 transition-colors">
+                            <a href="mailto:omni.lotservices@gmail.com" className="flex items-center text-gray-400 hover:text-blue-400 transition-colors">
                                 <Mail className="w-4 h-4 mr-2" />
                                 support@omni.lot
                             </a>
